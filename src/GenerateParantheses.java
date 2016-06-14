@@ -31,22 +31,14 @@ public class GenerateParantheses {
 
     private static List<String> generateParentheses(int n) {
         List<String> result=new ArrayList<String>();
-        generateParenthesesUtil(n, result, "", 0,0);
+        generateParenthesesUtil(result, "", n,n);
         return result;
     }
 
-    private static void generateParenthesesUtil(int n, List<String> result, String s, int openBraces, int closedBraces) {
-        if(openBraces==n && closedBraces==n){
-            result.add(s); return;
-        }
-        if (openBraces==n && closedBraces<n){
-            s+=")";
-        }
-        else{
-            if(openBraces==closedBraces){
-                s+="(";
-            }
-
-        }
+    private static void generateParenthesesUtil(List<String> result, String s, int openBraces, int closedBraces) {
+        if(openBraces>closedBraces) return;
+        if(openBraces==0 && closedBraces==0) result.add(s);
+        if(openBraces>0) generateParenthesesUtil(result, s+"(",openBraces-1,closedBraces);
+        if(closedBraces>0 && closedBraces>=openBraces) generateParenthesesUtil(result, s+")",openBraces, closedBraces-1);
     }
 }
