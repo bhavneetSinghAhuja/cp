@@ -75,5 +75,3 @@ buildNumber.properties
 
 .idea/
 cp.iml
-src/main/
-src/test/
