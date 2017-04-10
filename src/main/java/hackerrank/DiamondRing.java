@@ -63,23 +63,26 @@ public class DiamondRing {
         return result;
     }
 
-    private static void solveMazeUtil(int[][] mat, int x, int y, int rows, int cols, List<Triplet> possiblePath, Map<Integer, List<Triplet>> possibleResults) {
-        if(!(x<rows)) return;
-        if(!(y<cols)) return;
-        if (mat[x][y]==-1) return;
-        List<Triplet> possiblePaths=new ArrayList<>(possiblePath);
+    private static boolean solveMazeUtil(int[][] mat, int x, int y, int rows, int cols, List<Triplet> possiblePath, Map<Integer, List<Triplet>> possibleResults) {
+        if(!(x<rows)) return false;
+        if(!(y<cols)) return false;
+        if (mat[x][y]==-1) return false;
+
+        Triplet triplet=new Triplet(x,y,mat[x][y]);
         if(x==rows-1 && y==cols-1){
-            possiblePaths.add(new Triplet(x,y,mat[x][y]));
-            addPath(possiblePaths, possibleResults);
-            return;
+            possiblePath.add(triplet);
+            addPath(possiblePath, possibleResults);
+            possiblePath.remove(triplet);
+            return false;
         }
         if(mat[x][y]!=-1)
         {
-            possiblePaths.add(new Triplet(x,y, mat[x][y]));
+            possiblePath.add(triplet);
         }
 
-        solveMazeUtil(mat,x+1,y,rows,cols,possiblePaths,possibleResults);
-        solveMazeUtil(mat,x,y+1,rows,cols,possiblePaths,possibleResults);
+        if(!solveMazeUtil(mat,x+1,y,rows,cols,possiblePath,possibleResults)) possiblePath.remove(triplet);
+        if(!solveMazeUtil(mat,x,y+1,rows,cols,possiblePath,possibleResults)) possiblePath.remove(triplet);
+        return false;
     }
 
     private static void addPath(List<Triplet> possiblePath, Map<Integer, List<Triplet>> possibleResults) {
@@ -88,7 +91,7 @@ public class DiamondRing {
             sum+=triplet.value;
         }
 
-        possibleResults.put(sum, possiblePath);
+        possibleResults.put(sum, new ArrayList<>(possiblePath));
     }
 
     static class Triplet {
